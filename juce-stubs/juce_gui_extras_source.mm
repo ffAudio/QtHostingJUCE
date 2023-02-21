@@ -1,0 +1,6 @@
+
+#include "stdafx.h"
+
+#include "juce_config.h"
+
+#include "../JUCE/modules/juce_gui_extra/juce_gui_extra.mm"

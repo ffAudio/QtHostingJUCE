@@ -18,11 +18,41 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 set(TS_FILES QtHostingJUCE_en_GB.ts)
 
 set(PROJECT_SOURCES
+        # QT
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
         ${TS_FILES}
+        # JUCE
+        juce-stubs/stdafx.h
+        juce-stubs/juce_config.h
+        juce-stubs/juce_core_source.mm
+        juce-stubs/juce_audio_basics_source.mm
+        juce-stubs/juce_audio_devices_source.mm
+        juce-stubs/juce_audio_formats_source.mm
+        juce-stubs/juce_data_structures_source.mm
+        juce-stubs/juce_events_source.mm
+        juce-stubs/juce_graphics_source.mm
+        juce-stubs/juce_gui_basics_source.mm
+        juce-stubs/juce_gui_extras_source.mm
+)
+
+set(APPLE_FRAMEWORKS
+    "-framework AVFoundation"
+    "-framework CoreAudio"
+    "-framework CoreVideo"
+    "-framework CoreMidi"
+    "-framework CoreMedia"
+    "-framework QuartzCore"
+    "-framework AudioToolbox"
+    "-framework VideoToolbox"
+    "-framework Cocoa"
+    "-framework IOKit"
+    "-framework IOSurface"
+    "-framework Accelerate"
+    "-framework Metal"
+    "-framework MetalKit"
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -52,7 +82,9 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(QtHostingJUCE PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_include_directories(QtHostingJUCE PRIVATE ${CMAKE_SOURCE_DIR}/JUCE/modules)
+
+target_link_libraries(QtHostingJUCE PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${APPLE_FRAMEWORKS})
 
 set_target_properties(QtHostingJUCE PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
