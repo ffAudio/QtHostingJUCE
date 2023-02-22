@@ -31,6 +31,7 @@ set(PROJECT_SOURCES
         juce-stubs/juce_audio_basics_source.mm
         juce-stubs/juce_audio_devices_source.mm
         juce-stubs/juce_audio_formats_source.mm
+        juce-stubs/juce_audio_processors_source.mm
         juce-stubs/juce_data_structures_source.mm
         juce-stubs/juce_events_source.mm
         juce-stubs/juce_graphics_source.mm
@@ -39,10 +40,15 @@ set(PROJECT_SOURCES
         # Player
         audioplayer.h
         audioplayer.cpp
+        pluginmanager.h
+        pluginmanager.cpp
+        audiopluginholder.h
+        audiopluginholder.cpp
 )
 
 set(APPLE_FRAMEWORKS
     "-framework AVFoundation"
+    "-framework CoreAudioKit"
     "-framework CoreAudio"
     "-framework CoreVideo"
     "-framework CoreMidi"
@@ -85,7 +91,10 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_include_directories(QtHostingJUCE PRIVATE ${CMAKE_SOURCE_DIR}/JUCE/modules)
+target_include_directories(QtHostingJUCE PRIVATE
+    ${CMAKE_SOURCE_DIR}/JUCE/modules
+    ${CMAKE_SOURCE_DIR}/JUCE/modules/juce_audio_processors/format_types/VST3_SDK/
+)
 
 target_link_libraries(QtHostingJUCE PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${APPLE_FRAMEWORKS})
 

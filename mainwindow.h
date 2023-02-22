@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "audioplayer.h"
+#include "pluginmanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,7 +19,8 @@ public:
     ~MainWindow();
 
 private:
-    AudioPlayer audioPlayer;
+    PluginManager   pluginManager;
+    AudioPlayer     audioPlayer;
 
     Ui::MainWindow *ui;
 };

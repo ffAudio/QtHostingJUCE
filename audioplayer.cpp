@@ -1,6 +1,7 @@
 
 
 #include "audioplayer.h"
+#include "audiopluginholder.h"
 
 #include "juce-stubs/juce_config.h"
 #include <juce_core/juce_core.h>
@@ -19,6 +20,7 @@ public:
 
         deviceManager.addAudioCallback (&sourcePlayer);
     }
+
     ~AudioPlayer_Pimpl()
     {
         deviceManager.closeAudioDevice();
@@ -26,11 +28,16 @@ public:
 
 private:
     juce::ScopedJuceInitialiser_GUI juceGui; // bring up juce's event system
+
+    std::vector<std::unique_ptr<AudioPluginHolder>> plugins;
+
     juce::ToneGeneratorAudioSource  testTone;
     juce::AudioSourcePlayer         sourcePlayer;
     juce::AudioDeviceManager        deviceManager;
 
 };
+
+// ================================================================================
 
 AudioPlayer::AudioPlayer(QObject *parent)
     : QObject{parent},

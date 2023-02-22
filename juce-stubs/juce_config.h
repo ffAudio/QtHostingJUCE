@@ -1,6 +1,7 @@
 
 #pragma once
 
+#define JUCE_CUSTOM_VST3_SDK   0
 #define JUCE_PLUGINHOST_VST    0
 #define JUCE_PLUGINHOST_VST3   1
 #define JUCE_PLUGINHOST_AU     1
