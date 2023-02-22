@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "audioplayer.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -16,6 +18,8 @@ public:
     ~MainWindow();
 
 private:
+    AudioPlayer audioPlayer;
+
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

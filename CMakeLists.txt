@@ -36,6 +36,9 @@ set(PROJECT_SOURCES
         juce-stubs/juce_graphics_source.mm
         juce-stubs/juce_gui_basics_source.mm
         juce-stubs/juce_gui_extras_source.mm
+        # Player
+        audioplayer.h
+        audioplayer.cpp
 )
 
 set(APPLE_FRAMEWORKS
