@@ -12,6 +12,25 @@ public:
     {
         manager.addDefaultFormats();
 
+        // read JUCE AudioPluginHost plugin list
+        auto pluginFile = juce::File::getSpecialLocation (juce::File::userHomeDirectory)
+                .getChildFile ("Library")
+                .getChildFile ("Preferences")
+                .getChildFile ("Juce Audio Plugin Host.settings");
+
+        auto pluginXml = juce::XmlDocument::parse (pluginFile);
+        if (pluginXml)
+        {
+            if (auto* pluginList = pluginXml->getChildByAttribute("name", "pluginList"))
+            {
+                if (auto* knownPlugins = pluginList->getChildByName("KNOWNPLUGINS"))
+                {
+                    plugins.recreateFromXml (*knownPlugins);
+                }
+            }
+        }
+
+        DBG ("Found " + juce::String (plugins.getNumTypes()) + " plugins");
     }
 
     juce::AudioPluginFormatManager manager;

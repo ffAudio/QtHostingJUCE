@@ -19,8 +19,8 @@ public:
     ~MainWindow();
 
 private:
-    PluginManager   pluginManager;
     AudioPlayer     audioPlayer;
+    PluginManager   pluginManager;
 
     Ui::MainWindow *ui;
 };
