@@ -1,4 +1,5 @@
 #include "pluginmanager.h"
+#include "audiopluginholder.h"
 
 
 #include "juce-stubs/juce_config.h"
@@ -33,6 +34,31 @@ public:
         DBG ("Found " + juce::String (plugins.getNumTypes()) + " plugins");
     }
 
+    QList<PluginType> getPluginTypes() const
+    {
+        QList<PluginType> types;
+
+        for (const auto& pluginType : plugins.getTypes())
+            types.append({
+                             pluginType.fileOrIdentifier.toRawUTF8(),
+                             pluginType.name.toRawUTF8(),
+                             pluginType.manufacturerName.toRawUTF8()
+                        });
+
+        return types;
+    }
+
+    std::unique_ptr<AudioPluginHolder> createPluginInstance (const QString& pluginID) const
+    {
+        auto holder = std::make_unique<AudioPluginHolder>();
+        if (auto description = plugins.getTypeForIdentifierString (pluginID.toUtf8().constData()))
+        {
+            juce::String errorMessage;
+            auto instance = manager.createPluginInstance (*description, 48000.0, 1024, errorMessage);
+        }
+        return holder;
+    }
+
     juce::AudioPluginFormatManager manager;
     juce::KnownPluginList          plugins;
 };
@@ -46,3 +72,15 @@ PluginManager::PluginManager(QObject *parent)
 }
 
 PluginManager::~PluginManager() {}
+
+QList<PluginManager::PluginType> PluginManager::getPluginTypes() const
+{
+    return pimpl->getPluginTypes();
+}
+
+std::unique_ptr<AudioPluginHolder> PluginManager::createPluginInstance (const QString& pluginID) const
+{
+    return pimpl->createPluginInstance (pluginID);
+}
+
+
