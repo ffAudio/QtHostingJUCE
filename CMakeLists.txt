@@ -19,10 +19,10 @@ set(TS_FILES QtHostingJUCE_en_GB.ts)
 
 set(PROJECT_SOURCES
         # QT
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+        ui/main.cpp
+        ui/mainwindow.cpp
+        ui/mainwindow.h
+        ui/mainwindow.ui
         ${TS_FILES}
         # JUCE
         juce-stubs/stdafx.h
@@ -38,12 +38,12 @@ set(PROJECT_SOURCES
         juce-stubs/juce_gui_basics_source.mm
         juce-stubs/juce_gui_extras_source.mm
         # Player
-        audioplayer.h
-        audioplayer.cpp
-        pluginmanager.h
-        pluginmanager.cpp
-        audiopluginholder.h
-        audiopluginholder.cpp
+        audio/audioplayer.h
+        audio/audioplayer.cpp
+        audio/pluginmanager.h
+        audio/pluginmanager.cpp
+        audio/audiopluginholder.h
+        audio/audiopluginholder.cpp
 )
 
 set(APPLE_FRAMEWORKS
@@ -92,6 +92,7 @@ else()
 endif()
 
 target_include_directories(QtHostingJUCE PRIVATE
+    ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/JUCE/modules
     ${CMAKE_SOURCE_DIR}/JUCE/modules/juce_audio_processors/format_types/VST3_SDK/
 )

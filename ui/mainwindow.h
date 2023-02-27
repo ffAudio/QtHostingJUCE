@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
-#include "audioplayer.h"
-#include "pluginmanager.h"
+#include "audio/audioplayer.h"
+#include "audio/pluginmanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
