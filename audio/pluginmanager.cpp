@@ -1,9 +1,10 @@
 #include "pluginmanager.h"
 #include "audiopluginholder.h"
 
-
 #include "juce-stubs/juce_config.h"
 #include <juce_audio_processors/juce_audio_processors.h>
+
+#include <QComboBox>
 
 
 class PluginManager::PluginManager_Pimpl
@@ -42,7 +43,8 @@ public:
             types.append({
                              pluginType.fileOrIdentifier.toRawUTF8(),
                              pluginType.name.toRawUTF8(),
-                             pluginType.manufacturerName.toRawUTF8()
+                             pluginType.manufacturerName.toRawUTF8(),
+                             pluginType.isInstrument ? Option::Instrument : Option::Effect
                         });
 
         return types;
@@ -77,6 +79,20 @@ QList<PluginManager::PluginType> PluginManager::getPluginTypes() const
 {
     return pimpl->getPluginTypes();
 }
+
+void PluginManager::populateComboBox (QComboBox* combo, Options which, std::function<void(const QString& pluginID)> selectionFunc) const
+{
+    for (const auto& pluginType : pimpl->getPluginTypes())
+        if (which.testFlag (pluginType.kind))
+            combo->addItem (pluginType.name, pluginType.pluginID);
+
+    QObject::connect (combo, QOverload<int>::of (&QComboBox::currentIndexChanged),
+                      this, [combo, selectionFunc](int index)
+    {
+        selectionFunc (combo->itemData (index).toString());
+    });
+}
+
 
 std::unique_ptr<AudioPluginHolder> PluginManager::createPluginInstance (const QString& pluginID) const
 {

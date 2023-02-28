@@ -3,12 +3,19 @@
 
 #include <QObject>
 
+class AudioPluginHolder;
+
 class AudioPlayer : public QObject
 {
     Q_OBJECT
 public:
     explicit AudioPlayer(QObject *parent = nullptr);
     ~AudioPlayer() override;
+
+    void setPlugin (std::unique_ptr<AudioPluginHolder> plugin);
+
+public slots:
+    void showEditor();
 
 signals:
 

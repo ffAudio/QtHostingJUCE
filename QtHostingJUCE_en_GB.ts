@@ -5,7 +5,12 @@
     <name>MainWindow</name>
     <message>
         <location filename="ui/mainwindow.ui" line="14"/>
-        <source>MainWindow</source>
+        <source>QT Audio Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/mainwindow.ui" line="43"/>
+        <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

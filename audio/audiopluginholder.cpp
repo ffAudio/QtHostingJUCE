@@ -66,12 +66,31 @@ AudioPluginHolder::AudioPluginHolder (QObject *parent)
 
 AudioPluginHolder::~AudioPluginHolder() {}
 
-void AudioPluginHolder::setAudioProcessor (std::unique_ptr<juce::AudioProcessor> processor)
+void AudioPluginHolder::setAudioProcessor (std::unique_ptr<juce::AudioProcessor> processorToUse)
 {
-    pimpl->processor = std::move (processor);
+    pimpl->processor = std::move (processorToUse);
 }
+
+void AudioPluginHolder::prepareToPlay (double sampleRate, int blockSize)
+{
+    if (pimpl->processor)
+        pimpl->processor->prepareToPlay (sampleRate, blockSize);
+}
+
+void AudioPluginHolder::releaseResources()
+{
+    if (pimpl->processor)
+        pimpl->processor->releaseResources();
+}
+
+void AudioPluginHolder::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midi)
+{
+    if (pimpl->processor)
+        pimpl->processor->processBlock (buffer, midi);
+}
+
 
 void AudioPluginHolder::showEditor()
 {
-
+    pimpl->showEditor();
 }
