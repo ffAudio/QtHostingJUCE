@@ -41,7 +41,7 @@ public:
 
         for (const auto& pluginType : plugins.getTypes())
             types.append({
-                             pluginType.fileOrIdentifier.toRawUTF8(),
+                             pluginType.createIdentifierString().toRawUTF8(),
                              pluginType.name.toRawUTF8(),
                              pluginType.manufacturerName.toRawUTF8(),
                              pluginType.isInstrument ? Option::Instrument : Option::Effect
@@ -57,6 +57,16 @@ public:
         {
             juce::String errorMessage;
             auto instance = manager.createPluginInstance (*description, 48000.0, 1024, errorMessage);
+
+            if (errorMessage.isEmpty())
+            {
+                holder->setAudioProcessor (std::move (instance));
+            }
+            else
+            {
+                DBG ("Error creating instance: " + errorMessage);
+            }
+
         }
         return holder;
     }
