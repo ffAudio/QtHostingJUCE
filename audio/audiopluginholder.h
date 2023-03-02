@@ -16,7 +16,7 @@ class MidiBuffer;
 class AudioPluginWindow : public QWidget
 {
 public:
-    AudioPluginWindow();
+    AudioPluginWindow (QWidget* parent);
     ~AudioPluginWindow();
 
     void setAudioProcessorEditor (juce::AudioProcessorEditor* editor);

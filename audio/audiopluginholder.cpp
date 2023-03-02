@@ -4,10 +4,13 @@
 #include "juce-stubs/juce_config.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include <QPointer>
 
-AudioPluginWindow::AudioPluginWindow()
+
+AudioPluginWindow::AudioPluginWindow (QWidget* parent)
+    : QWidget (parent, Qt::Tool | Qt::WindowStaysOnTopHint)
 {
-    setWindowFlags (Qt::Tool);
+    setVisible (true);
     raise();
 }
 
@@ -19,12 +22,11 @@ AudioPluginWindow::~AudioPluginWindow()
 void AudioPluginWindow::setAudioProcessorEditor (juce::AudioProcessorEditor* editorToUse)
 {
     editor.reset (editorToUse);
-    editor->addToDesktop (winId());
+    editor->addToDesktop (0, (void*)winId());
     editor->setVisible (true);
 
     resize (editor->getWidth(), editor->getHeight());
 }
-
 
 // ================================================================================
 
@@ -33,7 +35,6 @@ class AudioPluginHolder::AudioPluginHolder_Pimpl
 public:
     AudioPluginHolder_Pimpl()
     {
-
     }
 
     void showEditor()
@@ -47,13 +48,12 @@ public:
             return;
         }
 
-        window = std::make_unique<AudioPluginWindow>();
+        window = new AudioPluginWindow(nullptr);
         window->setAudioProcessorEditor (processor->createEditor());
-
     }
 
     std::unique_ptr<juce::AudioProcessor> processor;
-    std::unique_ptr<AudioPluginWindow>    window;
+    QPointer<AudioPluginWindow>           window;
 
 };
 
@@ -64,7 +64,14 @@ AudioPluginHolder::AudioPluginHolder (QObject *parent)
       pimpl {std::make_unique<AudioPluginHolder_Pimpl>()}
 {}
 
-AudioPluginHolder::~AudioPluginHolder() {}
+AudioPluginHolder::~AudioPluginHolder()
+{
+    if (pimpl->window)
+    {
+        pimpl->window->close();
+        delete pimpl->window;
+    }
+}
 
 void AudioPluginHolder::setAudioProcessor (std::unique_ptr<juce::AudioProcessor> processorToUse)
 {
